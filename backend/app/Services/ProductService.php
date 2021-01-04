@@ -52,4 +52,29 @@ Class ProductService
 
         return $product;
     }
+
+    private function destroy($id) {
+        $storeImagePath = config("product.product_image_path");
+        $product = Products::where('id',$id)
+        ->withTrashed()
+        ->first();
+
+        if(!$product) {
+            return false;
+        }
+
+        try {
+            \DB::beginTransaction();
+
+            $product->delete();
+
+            \DB::commit();
+            $this->deleteFile("$storeImagePath\\$product->product_image");
+        } catch(\PDOException $ex) {
+            \DB::rollback();
+            return false;
+        }
+
+        return true;
+    }
 }
