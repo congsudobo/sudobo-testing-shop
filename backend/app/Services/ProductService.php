@@ -53,7 +53,7 @@ Class ProductService
         return $product;
     }
 
-    private function destroy($id) {
+    public function destroy($id) {
         $storeImagePath = config("product.product_image_path");
         $product = Products::where('id',$id)
         ->withTrashed()
@@ -76,5 +76,46 @@ Class ProductService
         }
 
         return true;
+    }
+
+    public function index($request) {
+        $productQuery = Products::with("category");
+
+        $this->buildSortQuery($request, $productQuery);
+        $this->buildPagination($request, $productQuery);
+
+        $products = $productQuery->get();
+        return $products;
+    }
+
+    private function buildPagination($request, $query) {
+        $pagination = $request->input("limit") ?? config("product.pagination.max_item");
+
+        $query->paginate($pagination);
+    }
+
+    private function buildSortQuery($request, $query) {
+        $searchId = $request->input("searchId");
+        $addedStart = $request->input("addedStart");
+        $addedEnd = $request->input("addedEnd");
+        $expirationStart = $request->input("expirationStart");
+        $expirationEnd = $request->input("expirationEnd");
+        $categoryId = $request->input("categoryId");
+
+        if($searchId) {
+            $query->where("id", $searchId);
+        }
+
+        if($addedStart && $addedEnd) {
+            $query->whereBetween("added_date", [$addedStart, $addedEnd]);
+        }
+
+        if($expirationStart && $expirationEnd) {
+            $query->whereBetween("expiration_date", [$expirationStart, $expirationEnd]);
+        }
+
+        if($categoryId) {
+            $query->where("category_id", $categoryId);
+        }
     }
 }
