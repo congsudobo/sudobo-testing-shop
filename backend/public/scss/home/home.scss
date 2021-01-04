@@ -1,0 +1,103 @@
+.home-main {
+    width: 1100px;
+    margin: auto;
+    background-color: #fff !important;
+}
+
+.home-main-table-header {
+    padding: 20px 20px;
+    border-bottom: #eeeeee 1px solid;
+}
+
+.home-main-table-header h2 {
+    color: #FC2600;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 0px;
+}
+
+.home-main-table-body {
+    padding: 0px 20px;
+}
+
+.body-filter-left {
+    float: left;
+
+    width: 50%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+.body-filter {
+    padding-top: 20px;
+    padding-bottom: 40px;
+}
+
+.body-filter-right {
+    width: 50%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+.filter {
+    padding-bottom: 15px;
+}
+
+.filter-label {
+    color: black;
+    float: left;
+    padding-right: 20px;
+    line-height: 30px;
+    margin: 0px;
+}
+
+.filter-input {
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 400px;
+    margin: 0px;
+    border: #eeeeee 1px solid;
+    border-radius: 5px;
+    height: 30px;
+}
+
+.input-date-time {
+    padding-left: 10px;
+    padding-right: 10px;
+    margin: 0px;
+    border: #eeeeee 1px solid;
+    border-radius: 5px;
+    height: 30px;
+}
+
+.input-p {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.filter-input-double {
+    display: flex;
+}
+
+.body-submit-button {
+    border: none;
+    border-radius: 5px;
+    background-color: #FC2600;
+    padding: 0px 30px;
+    line-height: 35px;
+    color: white;
+}
+
+.body-table-function {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 20px;
+}
+
+.table-title h2{
+    color: black;
+    font-weight: bold;
+    font-size: 25px;
+}
