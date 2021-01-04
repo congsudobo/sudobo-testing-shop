@@ -1,0 +1,19 @@
+body{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+html {
+    height: 100%;
+}
+
+.texth1{
+    color: #157ED2;
+    font-size: 39px;
+    font-weight: bold;
+    font-family: Arial;
+}
+.bg-white-lg{
+    background-color: #157ED2;
+}

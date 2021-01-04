@@ -1,0 +1,44 @@
+.red {
+    color: red;
+}
+
+.green {
+    color:green;
+}
+
+.grey {
+    color:grey;
+}
+
+.listoption  {
+    display: flex;
+    width: 100%;
+    padding-left: 20px;
+    height: 60px;
+    list-style: none;
+    align-items: center;
+    margin: 0px;
+}
+.listoption li {
+    text-align: center;
+    width: 100px;
+    height: 100%;
+    color:black;
+    display: flex;
+    align-items: center;
+}
+.listoption li a {
+    text-align: center;
+    width: 100%;
+
+}
+.listselect {
+    color: red!important;
+    border-bottom: 4px solid red;
+    font-weight: bold;
+}
+
+.listselect a{
+    color: red!important;
+    font-weight: bold;
+}
