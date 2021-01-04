@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Home</title>
+        <title>Quản lý sản phẩm</title>
         <link href="{{ asset('scss/home/home.scss') }}" rel="stylesheet">
         @include('common.css')
         @include('common.js')

@@ -1,17 +1,22 @@
 <?php
 
-namespace App\Http\Services;
+namespace App\Services;
 
 use App\Models\Products;
 use App\Traits\StorageTrait;
 
-Class ProductService
+Class ProductsService
 {
     use StorageTrait;
 
     public function store($request) {
         $storeImagePath = config("product.product_image_path");
         $fileName = $this->buildFile($request, $storeImagePath);
+
+        if(!$fileName) {
+            return false;
+        }
+
         $product = $this->buildProduct($request);
         $product->product_image = "$storeImagePath\\$fileName";
 
@@ -37,7 +42,6 @@ Class ProductService
         }
 
         return $this->uploadFile($request->file("product_image"), $storeImagePath);
-
     }
 
     private function buildProduct($request) {
@@ -47,7 +51,7 @@ Class ProductService
         $product->product_image = $request->input("product_image");
         $product->count = $request->input("count");
         $product->added_date = $request->input("added_date");
-        $product->expriration_date = $request->input("expriration_date");
+        $product->expiration_date = $request->input("expiration_date");
         $product->category_id = $request->input("category_id");
 
         return $product;

@@ -69,7 +69,6 @@ trait StorageTrait {
     {
         $file->store($path, 'public');
         $fileName = $file->hashName();
-
         return $fileName;
     }
 }

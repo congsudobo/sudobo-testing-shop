@@ -12,3 +12,5 @@
 */
 
 Route::get('/', "ProductsController@index");
+Route::get('/product/add', "ProductsController@create");
+Route::post('/product/add', "ProductsController@store");
