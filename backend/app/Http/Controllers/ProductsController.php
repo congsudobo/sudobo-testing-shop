@@ -36,7 +36,7 @@ class ProductsController extends Controller
         return view('product_add', ["categories" => $productCategories]);
     }
 
-    public function store(Request $request)
+    public function store(ProductsRequest $request)
     {
         $is_compeleted = $this->productService->store($request);
         $is_compeleted = $is_compeleted ? 1 : 2;
@@ -51,7 +51,7 @@ class ProductsController extends Controller
         return view('product_update', ["product" => $product, "categories" => $productCategories]);
     }
 
-    public function update(Request $request)
+    public function update(ProductsRequest $request)
     {
         $is_compeleted = $this->productService->store($request);
         $is_compeleted = $is_compeleted ? 1 : 2;

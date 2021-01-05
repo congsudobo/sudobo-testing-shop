@@ -27,7 +27,7 @@
                 <div class="header">
                     <span class="title">Cập nhật sản phẩm</span>
                 </div>
-                <form action="/product/add" method="POST" enctype="multipart/form-data">
+                <form action="/product/update" method="POST" enctype="multipart/form-data">
                     @csrf
                     @component('product_detail', ['product' => $product, 'categories' => $categories])
                     @endcomponent

@@ -27,22 +27,30 @@ Class ProductsService
             return false;
         }
 
+        $oldFileName = $product->getOriginal('product_image');
+        $newFileName = $product->product_image;
+
         try {
             \DB::beginTransaction();
 
             $product->save();
 
             \DB::commit();
+
             if(isset($product->id)) {
-                $oldFileName = $product->getOriginal('product_image');
-                $newFileName = $product->product_image;
                 if($oldFileName != $newFileName) {
                     $this->deleteFile($oldFileName);
                 }
             }
         } catch(\PDOException $ex) {
             \DB::rollback();
-            $this->deleteFile($product->product_image);
+            if(isset($product->id)) {
+                if($oldFileName != $newFileName) {
+                    $this->deleteFile($newFileName);
+                }
+            } else {
+                $this->deleteFile($product->product_image);
+            }
 
             return false;
         }
@@ -63,7 +71,11 @@ Class ProductsService
         $oldFileName = $product->getOriginal('product_image');
         $product->id = $request->input("id");
         $product->product_name = $request->input("product_name");
-        $product->product_image = "$storeImagePath/$newFileName" ?? $oldFileName;
+        if($newFileName) {
+            $product->product_image = "$storeImagePath/$newFileName";
+        } else if($oldFileName) {
+            $product->product_image = $oldFileName;
+        }
         $product->count = $request->input("count");
         $product->added_date = $request->input("added_date");
         $product->expiration_date = $request->input("expiration_date");
