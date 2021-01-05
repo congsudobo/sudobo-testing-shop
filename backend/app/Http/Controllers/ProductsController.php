@@ -24,8 +24,9 @@ class ProductsController extends Controller
         return view('home', [
             "products" => $products->items(), "paginator" => $products,
             "categories" => $productCategories,
-            "filter" => $request->only(['id', 'category_id', 'added_date_start', 'added_date_end', 'expiration_date_start', 'expiration_date_end'])
-            ]);
+            "filter" => $request->only(['id', 'category_id', 'added_date_start', 'added_date_end', 'expiration_date_start', 'expiration_date_end']),
+            "is_completed" => $request->input('is_completed'),
+        ]);
     }
 
     public function create(Request $request)
@@ -37,10 +38,8 @@ class ProductsController extends Controller
 
     public function store(Request $request)
     {
-        $this->productService->store($request);
-        $productCategories = $this->productCategoriesService->index();
-
-        return view('product_add', ["categories" => $productCategories]);
+        $is_compeleted = $this->productService->store($request);
+        return redirect("/?is_completed=$is_compeleted");
     }
 
     public function edit(Request $request)
@@ -53,9 +52,13 @@ class ProductsController extends Controller
 
     public function update(Request $request)
     {
-        $this->productService->store($request);
-        $productCategories = $this->productCategoriesService->index();
+        $is_compeleted = $this->productService->store($request);
 
-        return view('product_update', ["categories" => $productCategories]);
+        return redirect("/?is_completed=$is_compeleted");    }
+
+    public function destroy(Request $request) {
+        $is_compeleted = $this->productService->destroy($request);
+
+        return redirect("/?is_completed=$is_compeleted");   
     }
 }

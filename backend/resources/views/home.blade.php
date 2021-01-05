@@ -11,6 +11,17 @@
     </head>
     <body>
         @include('common.header')
+        @isset($is_completed)
+        @if($is_completed)
+            <div class="alert alert-success" role="alert">
+                Thành công!
+            </div>
+        @else
+        <div class="alert alert-danger" role="alert">
+            Có lỗi xảy ra!
+          </div>
+        @endif
+        @endisset
         <main class="home-main shadow">
             <div class="home-main-table-header">
                 <H2>Sản phẩm</H2>
@@ -39,7 +50,7 @@
                                 <select class="filter-input" name="category_id">
                                     <option value="">Chọn danh mục</option>
                                     @foreach ($categories as $category)
-                                        @isset($product)
+                                        @isset($filter['category_id'])
                                             <option {{$category->id == $filter['category_id'] ? 'selected' : ''}} value="{{$category->id}}">{{$category->category_name}}</option>
                                             @continue
                                         @endisset
@@ -83,7 +94,7 @@
                                   <th>Tuỳ chọn</th>
                                 </tr>
                               </thead>
-                              <tbody >
+                              <tbody class="tbody-table">
                                 @foreach ($products as $product)
                                 <tr>
                                   <td>{{ $product->product_name }}<div class="product-image"><img src="{{asset('storage/' . $product->product_image)}}"/></div></td>
@@ -93,7 +104,7 @@
                                   <td>{{$product->category->category_name}}</td>
                                   <td>
                                       <a href="product/update?id={{$product->id}}"><button name="btnUpdate" type="button" class="body-submit-button">Sửa</button></a>
-                                      <a href="product/delete?id={{$product->id}}"><button name="btnDelete" type="button" class="body-submit-button">Xoá</button>
+                                      <a onclick="myFunction()" href="product/delete?id={{$product->id}}"><button name="btnDelete" type="button" class="body-submit-button">Xoá</button>
                                 </td>
                                 </tr>
                                 @endforeach
@@ -105,6 +116,13 @@
                 </div>
             </div>
         </main>
+        <script>
+            function myFunction() {
+              if(!confirm("Bạn có chắc muốn xoá nó ?")) {
+                event.preventDefault()
+              }
+            }
+            </script>
         <!-- Modal -->
         <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
