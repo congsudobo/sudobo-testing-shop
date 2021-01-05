@@ -90,6 +90,15 @@
     color: white;
 }
 
+.body-button-warning {
+    border: none;
+    border-radius: 5px;
+    background-color: #F4D532;
+    padding: 0px 30px;
+    line-height: 35px;
+    color: white;
+}
+
 .body-table-function {
     display: flex;
     justify-content: space-between;
@@ -100,4 +109,13 @@
     color: black;
     font-weight: bold;
     font-size: 25px;
+}
+
+.product-image img {
+    height: 100px;
+    width: 100px;
+}
+
+.product-image {
+    float: right;
 }
