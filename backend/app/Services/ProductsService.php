@@ -21,14 +21,22 @@ Class ProductsService
             return false;
         }
 
-        $this->buildProduct($request, $product, $storeImagePath);
+        $this->buildProduct($request, $product);
+        $newFileName = $this->buildFile($request, $storeImagePath);
+        $oldFileName = $product->getOriginal('product_image');
 
-        if(!$product->product_image) {
+        if($oldFileName) {
+            $product->product_image = $oldFileName;
+        }
+
+        if($newFileName) {
+            $product->product_image = "$storeImagePath/$newFileName";
+        } else if($request->file('product_image')){
             return false;
         }
 
-        $oldFileName = $product->getOriginal('product_image');
         $newFileName = $product->product_image;
+        $product->id = $request->input("id");
 
         try {
             \DB::beginTransaction();
@@ -59,23 +67,11 @@ Class ProductsService
     }
 
     private function buildFile($request, $storeImagePath) {
-        if(!$request->file("product_image")) {
-            return null;
-        }
-
         return $this->uploadFile($request->file("product_image"), $storeImagePath);
     }
 
-    private function buildProduct($request, $product, $storeImagePath) {
-        $newFileName = $this->buildFile($request, $storeImagePath);
-        $oldFileName = $product->getOriginal('product_image');
-        $product->id = $request->input("id");
+    private function buildProduct($request, $product) {
         $product->product_name = $request->input("product_name");
-        if($newFileName) {
-            $product->product_image = "$storeImagePath/$newFileName";
-        } else if($oldFileName) {
-            $product->product_image = $oldFileName;
-        }
         $product->count = $request->input("count");
         $product->added_date = $request->input("added_date");
         $product->expiration_date = $request->input("expiration_date");
