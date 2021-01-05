@@ -11,14 +11,21 @@ Class ProductsService
 
     public function store($request) {
         $storeImagePath = config("product.product_image_path");
-        $fileName = $this->buildFile($request, $storeImagePath);
+        $product = new Products();
 
-        if(!$fileName) {
+        if($request->input('id')) {
+            $product = Products::find($request->input('id'));
+        }
+
+        if(!$product) {
             return false;
         }
 
-        $product = $this->buildProduct($request);
-        $product->product_image = "$storeImagePath\\$fileName";
+        $this->buildProduct($request, $product, $storeImagePath);
+
+        if(!$product->product_image) {
+            return false;
+        }
 
         try {
             \DB::beginTransaction();
@@ -26,9 +33,16 @@ Class ProductsService
             $product->save();
 
             \DB::commit();
+            if(isset($product->id)) {
+                $oldFileName = $product->getOriginal('product_image');
+                $newFileName = $product->product_image;
+                if($oldFileName != $newFileName) {
+                    $this->deleteFile($oldFileName);
+                }
+            }
         } catch(\PDOException $ex) {
             \DB::rollback();
-            $this->deleteFile("$storeImagePath\\$fileName");
+            $this->deleteFile($product->product_image);
 
             return false;
         }
@@ -44,17 +58,16 @@ Class ProductsService
         return $this->uploadFile($request->file("product_image"), $storeImagePath);
     }
 
-    private function buildProduct($request) {
-        $product = new Products();
+    private function buildProduct($request, $product, $storeImagePath) {
+        $newFileName = $this->buildFile($request, $storeImagePath);
+        $oldFileName = $product->getOriginal('product_image');
         $product->id = $request->input("id");
         $product->product_name = $request->input("product_name");
-        $product->product_image = $request->input("product_image");
+        $product->product_image = "$storeImagePath/$newFileName" ?? $oldFileName;
         $product->count = $request->input("count");
         $product->added_date = $request->input("added_date");
         $product->expiration_date = $request->input("expiration_date");
         $product->category_id = $request->input("category_id");
-
-        return $product;
     }
 
     public function destroy($id) {
@@ -86,25 +99,24 @@ Class ProductsService
         $productQuery = Products::with("category");
 
         $this->buildSortQuery($request, $productQuery);
-        $this->buildPagination($request, $productQuery);
+        $products = $this->buildPagination($request, $productQuery);
 
-        $products = $productQuery->get();
         return $products;
     }
 
     private function buildPagination($request, $query) {
         $pagination = $request->input("limit") ?? config("product.pagination.max_item");
 
-        $query->paginate($pagination);
+        return $query->paginate($pagination);
     }
 
     private function buildSortQuery($request, $query) {
-        $searchId = $request->input("searchId");
-        $addedStart = $request->input("addedStart");
-        $addedEnd = $request->input("addedEnd");
-        $expirationStart = $request->input("expirationStart");
-        $expirationEnd = $request->input("expirationEnd");
-        $categoryId = $request->input("categoryId");
+        $searchId = $request->input("id");
+        $addedStart = $request->input("added_date_start");
+        $addedEnd = $request->input("added_date_end");
+        $expirationStart = $request->input("expiration_date_start");
+        $expirationEnd = $request->input("expiration_date_end");
+        $categoryId = $request->input("category_id");
 
         if($searchId) {
             $query->where("id", $searchId);
@@ -121,5 +133,23 @@ Class ProductsService
         if($categoryId) {
             $query->where("category_id", $categoryId);
         }
+    }
+
+    public function edit($request) {
+        $productId = $request->input("id");
+
+        if(!$productId) {
+            return false;
+        }
+
+        $product = Products::find($productId);
+        $product->added_date = date("Y-m-d", strtotime($product->added_date));
+        $product->expiration_date = date("Y-m-d", strtotime($product->expiration_date));
+
+        if(!$product) {
+            return false;
+        }
+
+        return $product;
     }
 }
