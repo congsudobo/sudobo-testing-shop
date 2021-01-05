@@ -70,10 +70,10 @@ Class ProductsService
         $product->category_id = $request->input("category_id");
     }
 
-    public function destroy($id) {
+    public function destroy($request) {
+
         $storeImagePath = config("product.product_image_path");
-        $product = Products::where('id',$id)
-        ->withTrashed()
+        $product = Products::where('id',$request->input("id"))
         ->first();
 
         if(!$product) {
@@ -86,7 +86,7 @@ Class ProductsService
             $product->delete();
 
             \DB::commit();
-            $this->deleteFile("$storeImagePath\\$product->product_image");
+            $this->deleteFile("$storeImagePath/$product->product_image");
         } catch(\PDOException $ex) {
             \DB::rollback();
             return false;
