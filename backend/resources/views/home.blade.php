@@ -97,7 +97,13 @@
                               <tbody class="tbody-table">
                                 @foreach ($products as $product)
                                 <tr>
-                                  <td>{{ $product->product_name }}<div class="product-image"><img src="{{asset('storage/' . $product->product_image)}}"/></div></td>
+                                  <td>{{ $product->product_name }}
+                                    <div class="product-image">
+                                        @isset($product->product_image)
+                                            <img src="{{asset('storage/' . $product->product_image)}}"/>
+                                        @endisset
+                                    </div>
+                                  </td>
                                   <td>{{ $product->count }}</td>
                                   <td>{{date("m-d-Y", strtotime($product->added_date))}}</td>
                                   <td>{{date("m-d-Y", strtotime($product->expiration_date))}}</td>

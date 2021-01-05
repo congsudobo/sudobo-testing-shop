@@ -67,6 +67,10 @@ trait StorageTrait {
      */
     function uploadFile($file, $path)
     {
+        if(!$file) {
+            return null;;
+        }
+
         $file->store($path, 'public');
         $fileName = $file->hashName();
         return $fileName;
