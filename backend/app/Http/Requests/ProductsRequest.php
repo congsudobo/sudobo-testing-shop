@@ -26,9 +26,9 @@ class ProductsRequest extends FormRequest
         return [
             'product_name' => 'required|string',
             'added_date' => 'required|date',
-            'count' => 'digits:value',
-            'expriation_date' => 'required|date',
-            'product_image' => 'required|string',
+            'count' => 'integer:value',
+            'expiration_date' => 'required|date',
+            "product_image" => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
     }
 }
