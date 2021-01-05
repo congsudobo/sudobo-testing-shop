@@ -12,7 +12,7 @@
     <body>
         @include('common.header')
         @isset($is_completed)
-        @if($is_completed)
+        @if($is_completed == 1)
             <div class="alert alert-success" role="alert">
                 Thành công!
             </div>

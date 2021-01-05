@@ -86,7 +86,7 @@ Class ProductsService
             $product->delete();
 
             \DB::commit();
-            $this->deleteFile("$storeImagePath/$product->product_image");
+            $this->deleteFile("$product->product_image");
         } catch(\PDOException $ex) {
             \DB::rollback();
             return false;
